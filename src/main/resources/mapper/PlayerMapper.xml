@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.lening.mapper.PlayerMapper">
+    <resultMap id="getPlay" type="com.lening.entity.PlayerBean">
+        <id column="id" property="id"></id>
+        <result column="name" property="name"></result>
+        <result column="age" property="age"></result>
+        <result column="birthday" property="birthday"></result>
+        <result column="sid" property="sid"></result>
+        <result column="tid" property="tid"></result>
+        <association property="schoolBean" javaType="com.lening.entity.SchoolBean">
+            <id column="sid" property="sid"/>
+            <result column="sname" property="sname"/>
+        </association>
+        <association property="teamBean" javaType="com.lening.entity.TeamBean">
+            <id column="tid" property="tid"/>
+            <result column="tname" property="tname"/>
+            <result column="area" property="area"/>
+        </association>
+    </resultMap>
+    <select id="getAll" resultMap="getPlay">
+        select * from t_player p
+        left join t_school s on p.sid = s.sid
+        left join t_team t on p.tid = t.tid
+    </select>
+<select id="getTe" resultType="com.lening.entity.TeamBean">
+    select * from t_team
+</select>
+    <insert id="save" parameterType="com.lening.entity.PlayerBean">
+        insert into t_player(name,age,birthday,sid,tid) values(#{name},#{age},#{birthday},#{sid},#{tid})
+    </insert>
+
+    <select id="getSch" resultType="com.lening.entity.SchoolBean">
+        select * from t_school
+    </select>
+
+    <delete id="upDid" parameterType="com.lening.entity.PlayerBean">
+        delete from t_player where id = #{id}
+    </delete>
+</mapper>
